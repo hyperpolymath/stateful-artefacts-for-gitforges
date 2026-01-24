@@ -148,9 +148,144 @@ Output: "2 years, 3 months"
 
 ---
 
+## Horizon 2.5: Static Site Generation & Browser Extension (0% Complete) 🌐
+
+**Target:** Oct-Dec 2026
+**Status:** Planned
+
+### casket-ssg Integration (v0.6.0)
+
+**Merge Gnosis into casket-ssg:**
+
+casket-ssg is an existing Haskell-based static site generator at `hyperpolymath/casket-ssg`. It already has:
+- Frontmatter parsing
+- Markdown rendering
+- Template engine (`{{placeholder}}` syntax)
+- Build pipeline and file watching
+
+**Integration Plan:**
+
+1. **Add Gnosis modules to casket-ssg:**
+```
+casket-ssg/src/
+├── Gnosis/
+│   ├── Types.hs      # FlexiText, Context
+│   ├── SExp.hs       # S-expression parser
+│   └── Render.hs     # (:placeholder) renderer
+├── Format.hs         # Format detection (Markdown/Djot/AsciiDoc)
+└── Casket.hs         # Main (enhanced with Gnosis)
+```
+
+2. **Enhanced Frontmatter:**
+```yaml
+---
+title: My Post
+format: djot           # NEW: format preference
+template: blog
+---
+```
+
+3. **Unified Pipeline:**
+```haskell
+processFile :: Context -> FilePath -> FilePath -> IO ()
+processFile gnosisCtx inputPath outputPath = do
+  content <- readFile inputPath
+  let (fm, body) = parseFrontmatter content
+
+  -- Detect format (from frontmatter or file extension)
+  let format = detectFormat fm inputPath
+
+  -- Parse with appropriate format parser
+  html <- case format of
+    Markdown  -> return $ parseMarkdown body
+    Djot      -> parseDjot body      -- Via Pandoc
+    AsciiDoc  -> parseAsciiDoc body  -- Via Pandoc
+    Org       -> parseOrg body       -- Via Pandoc
+
+  -- Apply Gnosis rendering ((:placeholder) from 6scm)
+  let hydrated = renderWithMode PlainText gnosisCtx html
+
+  -- Apply casket template ({{title}} from frontmatter)
+  let output = applyTemplate fm hydrated
+
+  writeFile outputPath output
+```
+
+4. **6scm as Site-Wide Context:**
+```bash
+# Site structure
+my-site/
+├── .machine_readable/
+│   ├── STATE.scm          # Site-wide metadata
+│   └── ECOSYSTEM.scm
+├── content/
+│   ├── post1.md
+│   └── post2.djot         # Djot format
+└── templates/
+    └── blog.html
+
+# Build command
+casket-ssg build content/ _site/
+# Loads 6scm context ONCE
+# Processes all content files
+# Renders (:placeholders) from 6scm
+# Outputs static site
+```
+
+**Benefits:**
+- Write in any format (Markdown, Djot, AsciiDoc, Org)
+- Metadata-driven (6scm context available everywhere)
+- Accessibility-enforced (FlexiText for all dynamic content)
+- Temporal updates (automation updates 6scm, site rebuilds)
+
+---
+
+### Browser Extension (v0.8.0)
+
+**Client-Side Format Preference:**
+
+**Problem:** Git forges (GitHub, GitLab) control rendering. You can't say "render my .md as Djot."
+
+**Solution:** Browser extension that respects repository owner's format preference.
+
+**How It Works:**
+
+1. **Repository owner adds to META.scm:**
+```scheme
+(rendering-preferences
+  (preferred-format . "djot")
+  (fallback-format . "markdown"))
+```
+
+2. **Extension detects when viewing .md files:**
+- Checks if repo has `.machine_readable/META.scm`
+- Reads `rendering-preferences`
+- Fetches .md content via GitHub API
+- Re-renders with preferred format parser (Djot.js)
+- Injects rendered HTML into page
+
+3. **User experience:**
+- Extension users see: Content in owner's preferred format
+- Non-extension users see: GitHub's default Markdown
+- Repository owner: Controls presentation via metadata
+
+**Technology Stack:**
+- Browser extension: Chrome/Firefox WebExtension API
+- Parser: Djot.js (compiled to WebAssembly)
+- API: GitHub/GitLab REST API for content fetching
+- Caching: IndexedDB for parsed content
+
+**Privacy:**
+- Extension only activates on Git forge domains
+- Reads only public repositories (or user's authorized repos)
+- No data sent to external servers
+- All parsing happens client-side
+
+---
+
 ## Horizon 3: Neurosymbolic Bridge (0% Complete) 🔮
 
-**Target:** Q4 2026 - Q1 2027
+**Target:** Q1-Q2 2027
 **Status:** Research
 
 ### Code Scanning
@@ -307,8 +442,12 @@ git commit -am "docs: sync from GitHub API"
 | **v0.2.0** | 2026-02-28 | H1 | Paxos-Lite, full 6scm parser |
 | **v0.3.0** | 2026-04-30 | H2 | Conditional rendering, loops |
 | **v0.4.0** | 2026-06-30 | H2 | Functions, time intelligence |
-| **v0.5.0** | 2026-09-30 | H3 | Code scanning, compliance audit |
-| **v1.0.0** | 2026-12-31 | H3 | Living dashboard, AI suggestions |
+| **v0.5.0** | 2026-09-30 | H2 | Arithmetic, time intelligence |
+| **v0.6.0** | 2026-10-31 | H2.5 | casket-ssg integration, multi-format support |
+| **v0.7.0** | 2026-11-30 | H3 | Code scanning, compliance audit |
+| **v0.8.0** | 2026-12-31 | H2.5 | Browser extension, format preferences |
+| **v0.9.0** | 2027-02-28 | H3 | Living dashboard, Git forge API integration |
+| **v1.0.0** | 2027-03-31 | H3 | AI suggestions, plugin system, Git forge complete |
 
 ---
 

@@ -247,7 +247,47 @@ Status: {{milestone.status}}
 
 ---
 
-### v0.6.0 - Code Scanning (Oct 2026) - **NEUROSYMBOLIC ERA BEGINS**
+### v0.6.0 - casket-ssg Integration (Oct 2026)
+
+**Features:**
+- Merge Gnosis rendering engine into casket-ssg codebase
+- Format detection from frontmatter: `format: djot`
+- Pandoc integration for multi-format parsing (Djot, AsciiDoc, Org-mode)
+- 6scm metadata as site-wide context
+- Unified rendering pipeline: 6scm → Pandoc → Gnosis → casket template
+
+**Use Case:** "Write in Djot, render from 6scm metadata, deploy as static site"
+
+**Example:**
+```markdown
+---
+title: My Blog Post
+format: djot
+---
+
+I maintain (:repo-count) repositories across (:language-count) languages.
+```
+
+Build:
+```bash
+casket-ssg build content/ _site/
+# Reads .machine_readable/STATE.scm
+# Parses with Djot (via Pandoc)
+# Renders (:repo-count) and (:language-count) from STATE.scm
+# Outputs static HTML site
+```
+
+**Technology:**
+- casket-ssg (existing Haskell SSG)
+- Gnosis modules (Types, SExp, Render)
+- Pandoc library for format conversion
+- FlexiText accessibility enforcement
+
+**Audience:** Personal sites, documentation sites, blogs with temporal content
+
+---
+
+### v0.7.0 - Code Scanning (Nov 2026) - **NEUROSYMBOLIC ERA BEGINS**
 
 **Features:**
 - Detect programming languages in repo
@@ -268,7 +308,45 @@ Updated compliance-level: A → F
 
 ---
 
-### v0.7.0 - Living Dashboard (Dec 2026)
+### v0.8.0 - Browser Extension (Dec 2026)
+
+**Features:**
+- Chrome/Firefox extension for GitHub/GitLab
+- Reads META.scm from viewed repositories
+- Detects `(rendering-preferences (preferred-format . "djot"))`
+- Client-side re-rendering with owner's preferred format
+- Graceful fallback for users without extension
+
+**Use Case:** "Repository owner writes Markdown, but prefers viewers see Djot rendering"
+
+**How It Works:**
+1. Repo owner adds to META.scm:
+```scheme
+(rendering-preferences
+  (preferred-format . "djot")
+  (fallback-format . "markdown"))
+```
+
+2. Extension detects preference when viewing .md files
+3. Fetches .md content from GitHub API
+4. Re-renders with Djot parser (client-side)
+5. Injects rendered HTML into page
+
+**User Experience:**
+- Extension users: See content in owner's preferred format
+- Non-extension users: See GitHub's default Markdown rendering
+- Repository owner: Controls presentation via metadata
+
+**Technology:**
+- Browser extension (Chrome/Firefox)
+- Djot.js parser (WebAssembly)
+- GitHub/GitLab API for content fetching
+
+**Audience:** Technical documentation authors, Djot enthusiasts, accessibility advocates
+
+---
+
+### v0.9.0 - Living Dashboard (Q1 2027)
 
 **Features:**
 - Web dashboard reading 6scm files
@@ -289,11 +367,13 @@ Updated compliance-level: A → F
 
 ---
 
-### v1.0.0 - Git Forge Complete (Dec 2026)
+### v1.0.0 - Git Forge Complete (Q1 2027)
 
 **Features:**
 - All Horizon 1-3 features complete
 - GitHub/GitLab/Bitbucket full support
+- casket-ssg static site generation
+- Browser extension for format preferences
 - AI agent suggestions (propose STATE.scm updates, human approves)
 - Plugin system (custom functions in Haskell)
 - Comprehensive docs + video tutorials
