@@ -1,6 +1,6 @@
 cabal-version:       2.4
 name:                gnosis
-version:             0.2.0.0
+version:             1.0.0.0
 synopsis:            Stateful Artefacts Engine - Haskell renderer for dynamic documentation
 description:         Gnosis reads Guile Scheme metadata files and renders
                      template documents with dynamic placeholders into
@@ -21,6 +21,7 @@ executable gnosis
                      , Types
                      , Paxos
                      , SixSCM
+                     , DAX
   hs-source-dirs:      src
   default-language:    Haskell2010
   ghc-options:         -Wall -Wcompat -Widentities -Wincomplete-record-updates

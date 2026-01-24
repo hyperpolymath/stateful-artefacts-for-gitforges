@@ -80,7 +80,7 @@ main = do
     args <- getArgs
     case args of
         [templatePath, outputPath] -> do
-            putStrLn "Gnosis: Stateful Artefacts Engine v0.2.0"
+            putStrLn "Gnosis: Stateful Artefacts Engine v1.0.0"
             putStrLn $ "  Template: " ++ templatePath
             putStrLn $ "  Output:   " ++ outputPath
 
@@ -98,7 +98,7 @@ main = do
                     putStrLn "Hydration complete."
 
         ["--version"] ->
-            putStrLn "Gnosis v0.2.0 - Stateful Artefacts Engine (Full 6scm + Paxos-Lite)"
+            putStrLn "Gnosis v1.0.0 - Git Forge Complete (6scm + Paxos-Lite + DAX)"
 
         ["--help"] -> do
             putStrLn "Gnosis - The Stateful Artefacts Rendering Engine"
