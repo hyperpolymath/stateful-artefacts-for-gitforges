@@ -221,12 +221,34 @@ Script detects 537 repos:
 
 ### Installation
 
+**Prerequisites:** GHC 9.0+ and either Stack or Cabal
+
+#### Option 1: Using Stack (Recommended)
+
 ```bash
 # Clone repository
 git clone https://github.com/hyperpolymath/stateful-artefacts-for-gitforges
 cd stateful-artefacts-for-gitforges/gnosis
 
-# Build Gnosis (requires GHC/cabal)
+# Build with Stack
+stack build
+
+# Binary location:
+# .stack-work/install/x86_64-linux-tinfo6/.../9.14.1/bin/gnosis
+
+# Optional: Install to ~/.local/bin
+stack install
+```
+
+#### Option 2: Using Cabal
+
+```bash
+# Clone repository
+git clone https://github.com/hyperpolymath/stateful-artefacts-for-gitforges
+cd stateful-artefacts-for-gitforges/gnosis
+
+# Build with Cabal
+cabal update
 cabal build
 cabal install
 ```
