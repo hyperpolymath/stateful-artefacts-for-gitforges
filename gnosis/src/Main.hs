@@ -22,6 +22,8 @@ import qualified Data.Map.Strict as Map
 import Types (FlexiText(..), Context)
 import SExp (parseSExp, findInTree)
 import Render (renderWithBadges)
+import SixSCM (loadAll6SCM, defaultSCMPath)
+import Paxos (getCurrentTimestamp)
 
 -- | Load project state from STATE.scm and build the rendering context.
 loadState :: FilePath -> IO Context
@@ -78,12 +80,12 @@ main = do
     args <- getArgs
     case args of
         [templatePath, outputPath] -> do
-            putStrLn "Gnosis: Stateful Artefacts Engine v0.1.0"
+            putStrLn "Gnosis: Stateful Artefacts Engine v0.2.0"
             putStrLn $ "  Template: " ++ templatePath
             putStrLn $ "  Output:   " ++ outputPath
 
-            -- Load state from .machine_readable/STATE.scm
-            ctx <- loadState "../.machine_readable/STATE.scm"
+            -- Load all 6scm files from .machine_readable/
+            ctx <- loadAll6SCM "../.machine_readable"
 
             -- Read template
             templateExists <- doesFileExist templatePath
@@ -96,7 +98,7 @@ main = do
                     putStrLn "Hydration complete."
 
         ["--version"] ->
-            putStrLn "Gnosis v0.1.0 - Stateful Artefacts Engine"
+            putStrLn "Gnosis v0.2.0 - Stateful Artefacts Engine (Full 6scm + Paxos-Lite)"
 
         ["--help"] -> do
             putStrLn "Gnosis - The Stateful Artefacts Rendering Engine"
