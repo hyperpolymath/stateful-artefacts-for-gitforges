@@ -1,4 +1,4 @@
-;; SPDX-License-Identifier: AGPL-3.0-or-later
+;; SPDX-License-Identifier: MPL-2.0-or-later
 ;; SPDX-FileCopyrightText: 2025-2026 Jonathan D.A. Jewell (hyperpolymath)
 
 ;;; ECOSYSTEM.scm — Stateful Artefacts for Git Forges
@@ -49,7 +49,7 @@
        (relationship . "potential-consumer")
        (description . "Could use Gnosis for automated repo documentation"))
 
-      ((name . "gitvisor")
+      ((name . "git-hud")
        (relationship . "sibling-standard")
        (description . "Git repository supervision and health monitoring")))
 
