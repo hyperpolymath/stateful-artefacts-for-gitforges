@@ -1,3 +1,4 @@
+;; SPDX-License-Identifier: MPL-2.0-or-later
 ;; Simple STATE.scm for gnosis testing
 (state
   (identity

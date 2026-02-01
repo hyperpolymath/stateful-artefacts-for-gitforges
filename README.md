@@ -1,5 +1,11 @@
 # Stateful Artefacts for Git Forges
 
+## License & Philosophy
+
+This project must declare **MPL-2.0-or-later** for platform/tooling compatibility.
+
+Philosophy: **Palimpsest**. The Palimpsest-MPL (PMPL) text is provided in `license/PMPL-1.0.txt`, and the canonical source is the palimpsest-license repository.
+
 **Metadata-driven documentation that updates automatically as your project evolves.**
 
 Gnosis reads your project's 6scm metadata files and renders dynamic templates into static documentation that **stays current**—automatically updating repo counts, completion percentages, phase changes, and more as your project grows.
